@@ -12,7 +12,6 @@ const authMiddleware = (req, res, next) => {
       (req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer ') &&
         req.headers.authorization.split(' ')[1])
-    console.log(token)
 
     if (!token) {
       return unauthorizedResponse(res, 'Token not provided')
@@ -21,7 +20,7 @@ const authMiddleware = (req, res, next) => {
     const decoded = jwt.verify(token, env.JWT_SECRET)
 
     req.userId = decoded._id
-
+    req.userRole = decoded.role
     next()
   } catch (error) {
     console.error('Auth error:', error.message)
