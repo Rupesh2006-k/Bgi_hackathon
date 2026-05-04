@@ -16,7 +16,8 @@ const requireEnv = key => {
 const env = {
   PORT: requireEnv('PORT'),
   MONGO_URI: requireEnv('MONGO_URI'),
-  JWT_SECRET: requireEnv('JWT_SECRET')
+  JWT_SECRET: requireEnv('JWT_SECRET'),
+  FRONTEND_URL: requireEnv('FRONTEND_URL')
 }
-
+console.log('✅ All environment variables loaded successfully')
 export default env
