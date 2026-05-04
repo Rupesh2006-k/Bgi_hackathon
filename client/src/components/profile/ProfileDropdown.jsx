@@ -1,4 +1,6 @@
 import { LogOut, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { FaUserEdit } from "react-icons/fa";
 
 const ProfileDropdown = ({
   userdata,
@@ -6,6 +8,13 @@ const ProfileDropdown = ({
   setProfileOpen,
   handleLogout,
 }) => {
+  const navigate = useNavigate();
+
+  const handleProfileUpdate = () => {
+    setProfileOpen(false);
+    navigate("/profile");
+  };
+
   return (
     <div className="relative">
       <button
@@ -39,13 +48,23 @@ const ProfileDropdown = ({
 
           <hr className="my-3" />
 
-          <button
-            onClick={handleLogout}
-            className="flex cursor-pointer items-center gap-2 text-sm text-red-500 hover:text-red-600"
-          >
-            <LogOut size={16} />
-            Logout
-          </button>
+          <div className="flex items-center justify-between gap-3">
+            <button
+              onClick={handleProfileUpdate}
+              className="flex items-center gap-2 text-xs bg-orange-100 px-3 py-1 rounded-full text-orange-500 hover:bg-orange-200 transition"
+            >
+              <FaUserEdit size={14} />
+              Profile
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 transition"
+            >
+              <LogOut size={16} />
+              Logout
+            </button>
+          </div>
         </div>
       )}
     </div>

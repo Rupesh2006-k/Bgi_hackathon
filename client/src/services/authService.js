@@ -62,7 +62,7 @@ const profileService = async dispatch => {
     const userData = res?.data?.data
 
     dispatch(setUserDetails(userData))
-
+    showSuccess('Profile updated successfully')
     return res.data
   } catch (error) {
     const message = error.response?.data?.message || 'Profile fetch failed'
@@ -70,4 +70,27 @@ const profileService = async dispatch => {
     throw new Error(message, { cause: error })
   }
 }
-export { loginService, registerService, logoutService, profileService }
+
+const updateProfileService = async (formData, dispatch) => {
+  try {
+    let res = await axiosInstance.put('/auth/update-details', formData)
+
+    const userData = res?.data?.data
+    dispatch(setUserDetails(userData))
+    showSuccess('Profile updated successfully')
+    return res.data
+  } catch (error) {
+    const message = error.response?.data?.message || 'Profile update failed'
+    showError(message)
+
+    throw new Error(message, { cause: error })
+  }
+}
+
+export {
+  loginService,
+  registerService,
+  logoutService,
+  profileService,
+  updateProfileService
+}

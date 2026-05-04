@@ -13,6 +13,7 @@ import NotFound from "../components/NotFound";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import ProfileUpdate from "../components/profile/ProfileUpdate";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
           {
             path: "view-complaints",
             element: <ViewComplaints />,
+          },
+          {
+            path: "profile",
+            element: <ProfileUpdate />,
           },
         ],
       },
