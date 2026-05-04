@@ -39,24 +39,26 @@ const ProfileUpdate = () => {
   };
 
   const goBack = () => {
-    // safer fallback
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate("/dashboard");
+      navigate("/dashboard", { replace: true });
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
 
+    if (loading) return;
+
     try {
       setLoading(true);
 
       const res = await updateProfileService(formData, dispatch);
+      console.log(res);
 
       if (res?.success) {
-        goBack(); // 👈 same function use
+        navigate("/", { replace: true });
       }
     } catch (error) {
       console.log("Profile update error:", error);
@@ -68,8 +70,8 @@ const ProfileUpdate = () => {
   return (
     <div className="min-h-screen bg-orange-50 px-4 py-10">
       <div className="mx-auto max-w-xl rounded-2xl border border-orange-100 bg-white p-6 shadow-sm">
-        {/* 🔙 Back Button */}
         <button
+          type="button"
           onClick={goBack}
           className="mb-4 flex items-center gap-2 text-sm text-gray-600 hover:text-orange-500 transition"
         >

@@ -4,8 +4,6 @@ import { ChevronDown, Check } from "lucide-react";
 const CustomDropdown = ({ label, options, value, onChange }) => {
   const [open, setOpen] = useState(false);
 
-  const selectedLabel = value || label;
-
   return (
     <div className="relative">
       <button
@@ -13,7 +11,7 @@ const CustomDropdown = ({ label, options, value, onChange }) => {
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-gray-600"
       >
-        <span>{selectedLabel}</span>
+        <span>{value || label}</span>
         <ChevronDown
           size={16}
           className={`text-gray-400 transition ${open ? "rotate-180" : ""}`}

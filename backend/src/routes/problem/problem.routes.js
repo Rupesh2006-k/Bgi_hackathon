@@ -29,5 +29,5 @@ problemRouter.patch(
   updatePriorityCategoryController
 )
 
-problemRouter.get('/stats', getDashboardStatsController)
+problemRouter.get('/states', getDashboardStatsController)
 export default problemRouter

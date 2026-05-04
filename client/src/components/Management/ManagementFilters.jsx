@@ -13,7 +13,7 @@ const ManagementFilters = ({ filters, setFilters }) => {
             onChange={(e) =>
               setFilters((prev) => ({ ...prev, search: e.target.value }))
             }
-            placeholder="Search Area or Mobile Number..."
+            placeholder="Search title, area or mobile number..."
             className="w-full bg-transparent text-sm font-semibold text-gray-700 outline-none placeholder:text-gray-400"
           />
         </div>

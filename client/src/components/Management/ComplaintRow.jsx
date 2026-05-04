@@ -14,28 +14,32 @@ const statusStyle = {
 const ComplaintRow = ({ item }) => {
   return (
     <tr className="border-b border-gray-100 last:border-b-0">
-      <td className="px-8 py-5">
-        <h3 className="text-sm font-semibold text-slate-700">{item.title}</h3>
-        <p className="mt-1 text-xs font-semibold text-slate-400">{item.desc}</p>
+      <td className="whitespace-nowrap px-3 py-4 sm:px-5 lg:px-8 lg:py-5">
+        <h3 className="max-w-[170px] truncate text-[11px] font-semibold text-slate-700 sm:max-w-[220px] sm:text-xs lg:max-w-[280px] lg:text-sm">
+          {item.title}
+        </h3>
+        <p className="mt-1 max-w-[170px] truncate text-[10px] font-semibold text-slate-400 sm:max-w-[220px] sm:text-[11px] lg:max-w-[280px] lg:text-xs">
+          {item.desc}
+        </p>
       </td>
 
-      <td className="px-8 py-5 text-sm font-semibold text-slate-500">
+      <td className="whitespace-nowrap px-3 py-4 text-[10px] text-slate-500 sm:px-5 sm:text-xs lg:px-8 lg:py-5 lg:text-sm">
         {item.area}
       </td>
 
-      <td className="px-8 py-5 text-sm font-semibold text-slate-400">
+      <td className="whitespace-nowrap px-3 py-4 text-[10px] text-slate-400 sm:px-5 sm:text-xs lg:px-8 lg:py-5 lg:text-sm">
         {item.mobile}
       </td>
 
-      <td className="px-8 py-5">
-        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+      <td className="whitespace-nowrap px-3 py-4 sm:px-5 lg:px-8 lg:py-5">
+        <span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-semibold text-slate-600 sm:px-3 sm:text-xs">
           {item.category}
         </span>
       </td>
 
-      <td className="px-8 py-5">
+      <td className="whitespace-nowrap px-3 py-4 sm:px-5 lg:px-8 lg:py-5">
         <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`rounded-full px-2 py-1 text-[10px] font-semibold sm:px-3 sm:text-xs ${
             priorityStyle[item.priority]
           }`}
         >
@@ -43,9 +47,9 @@ const ComplaintRow = ({ item }) => {
         </span>
       </td>
 
-      <td className="px-8 py-5">
+      <td className="whitespace-nowrap px-3 py-4 sm:px-5 lg:px-8 lg:py-5">
         <span
-          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold ${
+          className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold sm:gap-2 sm:px-3 sm:text-xs ${
             statusStyle[item.status]
           }`}
         >
@@ -54,7 +58,7 @@ const ComplaintRow = ({ item }) => {
         </span>
       </td>
 
-      <td className="px-8 py-5 text-sm font-semibold text-slate-400">
+      <td className="whitespace-nowrap px-3 py-4 text-[10px] text-slate-400 sm:px-5 sm:text-xs lg:px-8 lg:py-5 lg:text-sm">
         {item.date}
       </td>
     </tr>
