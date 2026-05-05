@@ -1,20 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const initialState = {
+  complaints: []
+}
+
 const complaintSlice = createSlice({
   name: 'complaint',
-  initialState: {
-    complaints: []
-  },
+  initialState,
   reducers: {
-    // 🔹 Set All Complaints
     setComplaints: (state, action) => {
-      state.complaints = action.payload
+      state.complaints = action.payload || []
     },
 
-    // 🔹 Clear (optional but useful)
-    clearComplaints: state => {
-      state.complaints = []
-    }
+    clearComplaints: () => initialState
   }
 })
 

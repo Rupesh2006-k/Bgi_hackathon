@@ -50,8 +50,7 @@ export const getAllProblemsController = async (req, res) => {
 // UPDATE problem details
 export const updateProblemController = async (req, res) => {
   try {
-    const { id } = req.params
-    const { problem, area, mobile } = req.body
+    const { problem, area, mobile , id} = req.body
 
     const updateData = {}
 
@@ -85,8 +84,7 @@ export const updateProblemController = async (req, res) => {
 // UPDATE problem status by admin
 export const updateProblemStatusController = async (req, res) => {
   try {
-    const { id } = req.params
-    const { status, adminRemark } = req.body
+    const { status, adminRemark ,id} = req.body
 
     let user = await UserModel.findById(req?.userId)
 
@@ -151,7 +149,7 @@ export const updateProblemStatusController = async (req, res) => {
 // DELETE problem
 export const deleteProblemController = async (req, res) => {
   try {
-    const { id } = req.params
+    const { id } = req.body
 
     const problem = await ProblemModel.findByIdAndDelete(id)
 
@@ -167,8 +165,7 @@ export const deleteProblemController = async (req, res) => {
 // update priority and category
 export const updatePriorityCategoryController = async (req, res) => {
   try {
-    const { id } = req.params
-    const { priority, category } = req.body
+    const { priority, category,id } = req.body
 
     const updateData = {}
 

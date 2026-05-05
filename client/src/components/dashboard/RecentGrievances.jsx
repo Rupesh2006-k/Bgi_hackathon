@@ -1,93 +1,83 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { setRecentComplaints } from "../../features/recentSlice";
+import { getAllComplaintService } from "../../services/complaintService";
 
-const tableData = [
-  {
-    id: "#GR-2929",
-    subject: "Garbage collection missed",
-    dept: "Sanitation",
-    status: "RESOLVED",
-    priority: "LOW",
-    time: "42m ago",
-  },
-  {
-    id: "#GR-2928",
-    subject: "Garbage collection missed",
-    dept: "Sanitation",
-    status: "RESOLVED",
-    priority: "LOW",
-    time: "48m ago",
-  },
-  {
-    id: "#GR-2927",
-    subject: "Water leakage near park",
-    dept: "Water",
-    status: "OPEN",
-    priority: "MEDIUM",
-    time: "55m ago",
-  },
-  {
-    id: "#GR-2928",
-    subject: "Garbage collection missed",
-    dept: "Sanitation",
-    status: "RESOLVED",
-    priority: "LOW",
-    time: "48m ago",
-  },
-  {
-    id: "#GR-2927",
-    subject: "Water leakage near park",
-    dept: "Water",
-    status: "OPEN",
-    priority: "MEDIUM",
-    time: "55m ago",
-  },
-  {
-    id: "#GR-2928",
-    subject: "Garbage collection missed",
-    dept: "Sanitation",
-    status: "RESOLVED",
-    priority: "LOW",
-    time: "48m ago",
-  },
-  {
-    id: "#GR-2927",
-    subject: "Water leakage near park",
-    dept: "Water",
-    status: "OPEN",
-    priority: "MEDIUM",
-    time: "55m ago",
-  },
-  {
-    id: "#GR-2926",
-    subject: "Broken road divider",
-    dept: "Roads & Transport",
-    status: "IN PROGRESS",
-    priority: "HIGH",
-    time: "1h ago",
-  },
-  {
-    id: "#GR-2925",
-    subject: "Overflowing dustbin",
-    dept: "Sanitation",
-    status: "RESOLVED",
-    priority: "LOW",
-    time: "2h ago",
-  },
-];
+const getStatusClass = (status = "") => {
+  const value = status.toLowerCase();
 
-const getStatusClass = (status) => {
-  if (status === "RESOLVED") return "bg-green-50 text-green-600";
-  if (status === "OPEN") return "bg-orange-50 text-orange-500";
+  if (value === "resolved") return "bg-green-50 text-green-600";
+  if (value === "pending") return "bg-orange-50 text-orange-500";
+  if (value === "rejected") return "bg-red-50 text-red-500";
+
   return "bg-yellow-50 text-yellow-600";
 };
 
-const getPriorityClass = (priority) => {
-  if (priority === "HIGH") return "bg-black text-white";
-  if (priority === "MEDIUM") return "bg-orange-500 text-white";
+const getPriorityClass = (priority = "") => {
+  const value = priority.toLowerCase();
+
+  if (value === "high") return "bg-black text-white";
+  if (value === "medium") return "bg-orange-500 text-white";
+
   return "bg-gray-100 text-gray-600";
 };
 
+const getTimeAgo = (date) => {
+  if (!date) return "N/A";
+
+  const diff = Date.now() - new Date(date).getTime();
+  const minutes = Math.floor(diff / 60000);
+
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes}m ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+
+  const days = Math.floor(hours / 24);
+  return `${days}d ago`;
+};
+
+const formatText = (text) => {
+  if (!text) return "N/A";
+  return text.charAt(0).toUpperCase() + text.slice(1);
+};
+
 const RecentGrievances = () => {
+  const dispatch = useDispatch();
+
+  const recentComplaints = useSelector(
+    (state) => state.recent.recentComplaints,
+  );
+
+  const [loading, setLoading] = useState(false);
+
+  const fetchRecentComplaints = async () => {
+    try {
+      setLoading(true);
+
+      const res = await getAllComplaintService();
+
+      if (res?.success) {
+        const latestComplaints = (res.data || [])
+          .slice()
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 10);
+
+        dispatch(setRecentComplaints(latestComplaints));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecentComplaints();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 25 }}
@@ -95,7 +85,6 @@ const RecentGrievances = () => {
       transition={{ duration: 0.45, delay: 0.5 }}
       className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
     >
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-100 p-5">
         <h2 className="text-base font-semibold text-black">
           Recent Grievances
@@ -106,7 +95,6 @@ const RecentGrievances = () => {
         </button>
       </div>
 
-      {/* Table */}
       <div className="max-h-[420px] overflow-auto">
         <table className="w-full min-w-[760px] text-left">
           <thead className="sticky top-0 z-10 bg-orange-50 text-xs font-medium text-gray-500">
@@ -121,53 +109,71 @@ const RecentGrievances = () => {
           </thead>
 
           <tbody>
-            {tableData.map((row, index) => (
-              <motion.tr
-                key={`${row.id}-${index}`}
-                initial={{ opacity: 0, x: -14 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.06 }}
-                className="border-t border-gray-100 transition hover:bg-orange-50/60"
-              >
-                {/* ID */}
-                <td className="px-5 py-4 text-sm font-medium text-black">
-                  {row.id}
+            {loading ? (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="px-5 py-8 text-center text-sm font-medium text-gray-400"
+                >
+                  Loading recent grievances...
                 </td>
+              </tr>
+            ) : recentComplaints?.length > 0 ? (
+              recentComplaints.map((row, index) => (
+                <motion.tr
+                  key={row._id || row.trackingId || index}
+                  initial={{ opacity: 0, x: -14 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.06 }}
+                  className="border-t border-gray-100 transition hover:bg-orange-50/60"
+                >
+                  <td className="px-5 py-4 text-sm font-medium text-black">
+                    {row.trackingId || `#${row._id?.slice(-6)}`}
+                  </td>
 
-                {/* Subject */}
-                <td className="px-5 py-4 text-sm text-gray-800">
-                  {row.subject}
+                  <td className="px-5 py-4 text-sm text-gray-800">
+                    {row.problem || "N/A"}
+                  </td>
+
+                  <td className="px-5 py-4 text-sm text-gray-600">
+                    {formatText(row.category)}
+                  </td>
+
+                  <td className="px-5 py-4">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${getStatusClass(
+                        row.status,
+                      )}`}
+                    >
+                      {row.status?.toUpperCase() || "N/A"}
+                    </span>
+                  </td>
+
+                  <td className="px-5 py-4">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${getPriorityClass(
+                        row.priority,
+                      )}`}
+                    >
+                      {row.priority?.toUpperCase() || "N/A"}
+                    </span>
+                  </td>
+
+                  <td className="px-5 py-4 text-xs text-gray-400">
+                    {getTimeAgo(row.createdAt)}
+                  </td>
+                </motion.tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="6"
+                  className="px-5 py-8 text-center text-sm font-medium text-gray-400"
+                >
+                  No recent grievances found
                 </td>
-
-                {/* Department */}
-                <td className="px-5 py-4 text-sm text-gray-600">{row.dept}</td>
-
-                {/* Status */}
-                <td className="px-5 py-4">
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${getStatusClass(
-                      row.status,
-                    )}`}
-                  >
-                    {row.status}
-                  </span>
-                </td>
-
-                {/* Priority */}
-                <td className="px-5 py-4">
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${getPriorityClass(
-                      row.priority,
-                    )}`}
-                  >
-                    {row.priority}
-                  </span>
-                </td>
-
-                {/* Time */}
-                <td className="px-5 py-4 text-xs text-gray-400">{row.time}</td>
-              </motion.tr>
-            ))}
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -176,3 +182,182 @@ const RecentGrievances = () => {
 };
 
 export default RecentGrievances;
+
+// import { motion } from "framer-motion";
+
+// const tableData = [
+//   {
+//     id: "#GR-2929",
+//     subject: "Garbage collection missed",
+//     dept: "Sanitation",
+//     status: "RESOLVED",
+//     priority: "LOW",
+//     time: "42m ago",
+//   },
+//   {
+//     id: "#GR-2928",
+//     subject: "Garbage collection missed",
+//     dept: "Sanitation",
+//     status: "RESOLVED",
+//     priority: "LOW",
+//     time: "48m ago",
+//   },
+//   {
+//     id: "#GR-2927",
+//     subject: "Water leakage near park",
+//     dept: "Water",
+//     status: "OPEN",
+//     priority: "MEDIUM",
+//     time: "55m ago",
+//   },
+//   {
+//     id: "#GR-2928",
+//     subject: "Garbage collection missed",
+//     dept: "Sanitation",
+//     status: "RESOLVED",
+//     priority: "LOW",
+//     time: "48m ago",
+//   },
+//   {
+//     id: "#GR-2927",
+//     subject: "Water leakage near park",
+//     dept: "Water",
+//     status: "OPEN",
+//     priority: "MEDIUM",
+//     time: "55m ago",
+//   },
+//   {
+//     id: "#GR-2928",
+//     subject: "Garbage collection missed",
+//     dept: "Sanitation",
+//     status: "RESOLVED",
+//     priority: "LOW",
+//     time: "48m ago",
+//   },
+//   {
+//     id: "#GR-2927",
+//     subject: "Water leakage near park",
+//     dept: "Water",
+//     status: "OPEN",
+//     priority: "MEDIUM",
+//     time: "55m ago",
+//   },
+//   {
+//     id: "#GR-2926",
+//     subject: "Broken road divider",
+//     dept: "Roads & Transport",
+//     status: "IN PROGRESS",
+//     priority: "HIGH",
+//     time: "1h ago",
+//   },
+//   {
+//     id: "#GR-2925",
+//     subject: "Overflowing dustbin",
+//     dept: "Sanitation",
+//     status: "RESOLVED",
+//     priority: "LOW",
+//     time: "2h ago",
+//   },
+// ];
+
+// const getStatusClass = (status) => {
+//   if (status === "RESOLVED") return "bg-green-50 text-green-600";
+//   if (status === "OPEN") return "bg-orange-50 text-orange-500";
+//   return "bg-yellow-50 text-yellow-600";
+// };
+
+// const getPriorityClass = (priority) => {
+//   if (priority === "HIGH") return "bg-black text-white";
+//   if (priority === "MEDIUM") return "bg-orange-500 text-white";
+//   return "bg-gray-100 text-gray-600";
+// };
+
+// const RecentGrievances = () => {
+//   return (
+//     <motion.div
+//       initial={{ opacity: 0, y: 25 }}
+//       animate={{ opacity: 1, y: 0 }}
+//       transition={{ duration: 0.45, delay: 0.5 }}
+//       className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
+//     >
+//       {/* Header */}
+//       <div className="flex items-center justify-between border-b border-gray-100 p-5">
+//         <h2 className="text-base font-semibold text-black">
+//           Recent Grievances
+//         </h2>
+
+//         <button className="text-xs font-medium text-orange-500 transition hover:text-black">
+//           View All Records
+//         </button>
+//       </div>
+
+//       {/* Table */}
+//       <div className="max-h-[420px] overflow-auto">
+//         <table className="w-full min-w-[760px] text-left">
+//           <thead className="sticky top-0 z-10 bg-orange-50 text-xs font-medium text-gray-500">
+//             <tr>
+//               <th className="px-5 py-4">ID</th>
+//               <th className="px-5 py-4">SUBJECT</th>
+//               <th className="px-5 py-4">DEPARTMENT</th>
+//               <th className="px-5 py-4">STATUS</th>
+//               <th className="px-5 py-4">PRIORITY</th>
+//               <th className="px-5 py-4">TIME</th>
+//             </tr>
+//           </thead>
+
+//           <tbody>
+//             {tableData.map((row, index) => (
+//               <motion.tr
+//                 key={`${row.id}-${index}`}
+//                 initial={{ opacity: 0, x: -14 }}
+//                 animate={{ opacity: 1, x: 0 }}
+//                 transition={{ duration: 0.3, delay: index * 0.06 }}
+//                 className="border-t border-gray-100 transition hover:bg-orange-50/60"
+//               >
+//                 {/* ID */}
+//                 <td className="px-5 py-4 text-sm font-medium text-black">
+//                   {row.id}
+//                 </td>
+
+//                 {/* Subject */}
+//                 <td className="px-5 py-4 text-sm text-gray-800">
+//                   {row.subject}
+//                 </td>
+
+//                 {/* Department */}
+//                 <td className="px-5 py-4 text-sm text-gray-600">{row.dept}</td>
+
+//                 {/* Status */}
+//                 <td className="px-5 py-4">
+//                   <span
+//                     className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${getStatusClass(
+//                       row.status,
+//                     )}`}
+//                   >
+//                     {row.status}
+//                   </span>
+//                 </td>
+
+//                 {/* Priority */}
+//                 <td className="px-5 py-4">
+//                   <span
+//                     className={`rounded-full px-2.5 py-1 text-[10px] font-medium ${getPriorityClass(
+//                       row.priority,
+//                     )}`}
+//                   >
+//                     {row.priority}
+//                   </span>
+//                 </td>
+
+//                 {/* Time */}
+//                 <td className="px-5 py-4 text-xs text-gray-400">{row.time}</td>
+//               </motion.tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       </div>
+//     </motion.div>
+//   );
+// };
+
+// export default RecentGrievances;

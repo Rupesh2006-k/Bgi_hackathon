@@ -15,16 +15,12 @@ const problemRouter = express.Router()
 problemRouter.post('/create', authMiddleware, createProblemController)
 problemRouter.get('/all', getAllProblemsController)
 
-problemRouter.put('/update/:id', authMiddleware, updateProblemController)
-problemRouter.patch(
-  '/status/:id',
-  authMiddleware,
-  updateProblemStatusController
-)
-problemRouter.delete('/delete/:id', authMiddleware, deleteProblemController)
+problemRouter.put('/update', authMiddleware, updateProblemController)
+problemRouter.patch('/status', authMiddleware, updateProblemStatusController)
+problemRouter.delete('/delete', authMiddleware, deleteProblemController)
 
 problemRouter.patch(
-  '/update-priority-category/:id',
+  '/update-priority-category',
   authMiddleware,
   updatePriorityCategoryController
 )

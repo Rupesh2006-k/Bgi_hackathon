@@ -22,19 +22,12 @@ const problemSchema = new mongoose.Schema(
       lowercase: true,
       trim: true
     },
-
     category: {
       type: String,
-      enum: [
-        'water',
-        'garbage',
-        'electricity',
-        'road',
-        'sanitization',
-        'other'
-      ],
+      enum: ['water', 'garbage', 'electricity', 'road', 'sanitation', 'other'],
       lowercase: true,
-      trim: true
+      trim: true,
+      default: 'other'
     },
     mobile: {
       type: String,
@@ -75,6 +68,11 @@ const problemSchema = new mongoose.Schema(
     rejectedAt: {
       type: Date,
       default: null
+    },
+    trackingId: {
+      type: String,
+      unique: true,
+      index: true
     }
   },
   {
@@ -82,6 +80,11 @@ const problemSchema = new mongoose.Schema(
   }
 )
 
+problemSchema.pre('save', function () {
+  if (!this.trackingId) {
+    this.trackingId = 'AGRV-' + Math.floor(100000 + Math.random() * 900000)
+  }
+})
 const ProblemModel = mongoose.model('Problem', problemSchema)
 
 export default ProblemModel
