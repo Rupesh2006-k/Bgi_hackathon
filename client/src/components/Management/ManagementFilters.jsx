@@ -7,13 +7,17 @@ const ManagementFilters = ({ filters, setFilters }) => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-[1.8fr_0.7fr_0.7fr_0.7fr_auto]">
         <div className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3">
           <Search size={20} className="text-gray-400" />
+
           <input
             type="text"
             value={filters.search}
             onChange={(e) =>
-              setFilters((prev) => ({ ...prev, search: e.target.value }))
+              setFilters((prev) => ({
+                ...prev,
+                search: e.target.value,
+              }))
             }
-            placeholder="Search title, area or mobile number..."
+            placeholder="Search complaint, area, mobile or tracking ID..."
             className="w-full bg-transparent text-sm font-semibold text-gray-700 outline-none placeholder:text-gray-400"
           />
         </div>
@@ -22,14 +26,20 @@ const ManagementFilters = ({ filters, setFilters }) => {
           label="Category"
           value={filters.category}
           options={[
-            "Water Supply",
+            "Road",
+            "Water",
+            "Electricity",
+            "Garbage",
             "Sanitation",
-            "Infrastructure",
-            "Public Works",
-            "Public Safety",
+            "Air",
+            "Tax",
+            "Other",
           ]}
           onChange={(value) =>
-            setFilters((prev) => ({ ...prev, category: value }))
+            setFilters((prev) => ({
+              ...prev,
+              category: value,
+            }))
           }
         />
 
@@ -38,24 +48,38 @@ const ManagementFilters = ({ filters, setFilters }) => {
           value={filters.priority}
           options={["High", "Medium", "Low"]}
           onChange={(value) =>
-            setFilters((prev) => ({ ...prev, priority: value }))
+            setFilters((prev) => ({
+              ...prev,
+              priority: value,
+            }))
           }
         />
 
         <CustomDropdown
           label="Status"
           value={filters.status}
-          options={["Pending", "In Progress", "Resolved", "Rejected"]}
+          options={["Pending", "Resolved", "Rejected"]}
           onChange={(value) =>
-            setFilters((prev) => ({ ...prev, status: value }))
+            setFilters((prev) => ({
+              ...prev,
+              status: value,
+            }))
           }
         />
 
         <button
           type="button"
+          onClick={() =>
+            setFilters(() => ({
+              search: "",
+              category: "",
+              priority: "",
+              status: "",
+            }))
+          }
           className="rounded-lg bg-slate-950 px-6 py-3 text-sm font-semibold text-white shadow-sm"
         >
-          Apply Filters
+          Reset
         </button>
       </div>
     </div>

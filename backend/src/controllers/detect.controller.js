@@ -23,16 +23,16 @@ const hasKeyword = (text, keyword) => {
 
 const detectController = async (req, res) => {
   try {
-    const { prompt } = req.body
+    const { problem } = req.body
 
-    if (!prompt?.trim()) {
+    if (!problem?.trim()) {
       return res.status(400).json({
         success: false,
-        message: 'Prompt is required'
+        message: 'Problem is required'
       })
     }
 
-    const text = normalizeText(prompt)
+    const text = normalizeText(problem)
 
     let detectedCategory = 'other'
     let detectedPriority = 'low'
@@ -58,7 +58,7 @@ const detectController = async (req, res) => {
     }
 
     const detect = await DetectModel.create({
-      prompt,
+      problem:  problem.trim(),
       category: detectedCategory,
       priority: detectedPriority
     })

@@ -7,7 +7,7 @@ const PRIORITY_ENUM = Object.keys(PRIORITY_CONFIG)
 
 const detectSchema = new mongoose.Schema(
   {
-    prompt: {
+    problem: {
       type: String,
       required: true,
       trim: true,
@@ -41,8 +41,8 @@ const detectSchema = new mongoose.Schema(
 // 🔥 Pre-save hook (normalize + fallback safety)
 detectSchema.pre('save', function () {
   // normalize text
-  if (this.prompt) {
-    this.normalizedText = this.prompt.toLowerCase().trim()
+  if (this.problem) {
+    this.normalizedText = this.problem.toLowerCase().trim()
   }
 
   // ✅ category fallback

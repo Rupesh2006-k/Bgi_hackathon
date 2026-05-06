@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
+import { CATEGORY_CONFIG } from '../config/categoryConfig.js'
 
+const CATEGORY_ENUM = [...Object.keys(CATEGORY_CONFIG), 'other']
 const problemSchema = new mongoose.Schema(
   {
     problem: {
@@ -24,7 +26,7 @@ const problemSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ['water', 'garbage', 'electricity', 'road', 'sanitation', 'other'],
+      enum: CATEGORY_ENUM,
       lowercase: true,
       trim: true,
       default: 'other'

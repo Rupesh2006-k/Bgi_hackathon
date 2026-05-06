@@ -6,7 +6,6 @@ const priorityStyle = {
 
 const statusStyle = {
   Pending: "bg-orange-50 text-orange-600 border border-orange-200",
-  "In Progress": "bg-blue-50 text-blue-600 border border-blue-200",
   Resolved: "bg-emerald-50 text-emerald-600 border border-emerald-200",
   Rejected: "bg-red-50 text-red-600 border border-red-200",
 };
@@ -18,6 +17,7 @@ const ComplaintRow = ({ item }) => {
         <h3 className="max-w-[170px] truncate text-[11px] font-semibold text-slate-700 sm:max-w-[220px] sm:text-xs lg:max-w-[280px] lg:text-sm">
           {item.title}
         </h3>
+
         <p className="mt-1 max-w-[170px] truncate text-[10px] font-semibold text-slate-400 sm:max-w-[220px] sm:text-[11px] lg:max-w-[280px] lg:text-xs">
           {item.desc}
         </p>
@@ -40,7 +40,7 @@ const ComplaintRow = ({ item }) => {
       <td className="whitespace-nowrap px-3 py-4 sm:px-5 lg:px-8 lg:py-5">
         <span
           className={`rounded-full px-2 py-1 text-[10px] font-semibold sm:px-3 sm:text-xs ${
-            priorityStyle[item.priority]
+            priorityStyle[item.priority] || priorityStyle.Medium
           }`}
         >
           {item.priority}
@@ -50,7 +50,7 @@ const ComplaintRow = ({ item }) => {
       <td className="whitespace-nowrap px-3 py-4 sm:px-5 lg:px-8 lg:py-5">
         <span
           className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold sm:gap-2 sm:px-3 sm:text-xs ${
-            statusStyle[item.status]
+            statusStyle[item.status] || statusStyle.Pending
           }`}
         >
           <span className="h-1.5 w-1.5 rounded-full bg-current" />

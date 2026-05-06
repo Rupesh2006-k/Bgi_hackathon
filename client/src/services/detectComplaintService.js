@@ -2,10 +2,10 @@ import axiosInstance from '../config/axiosInstance'
 import { setSubmissionSummary } from '../features/submissionSummarySlice'
 import { showError } from '../utils/toastUtils'
 
-export const detectComplaintService = async ({ prompt, dispatch }) => {
+export const detectComplaintService = async ({ problem, dispatch }) => {
   try {
     const res = await axiosInstance.post('/complaint/detect', {
-      prompt
+      problem
     })
     if (res?.success) {
       dispatch(setSubmissionSummary(res.data))
