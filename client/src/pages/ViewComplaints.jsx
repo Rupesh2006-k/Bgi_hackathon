@@ -8,13 +8,11 @@ const ViewComplaints = () => {
   const dispatch = useDispatch();
 
   const complaints = useSelector((state) => state.complaint.complaints);
+  const user = useSelector((state) => state.user.user);
 
   const fetchComplaints = async () => {
     try {
       const res = await getAllComplaintService();
-      console.log(res);
-
-      // API response me data array aa raha hai
       dispatch(setComplaints(res?.data || []));
     } catch (error) {
       console.log("Complaint fetch error:", error);
@@ -26,19 +24,23 @@ const ViewComplaints = () => {
     fetchComplaints();
   }, []);
 
-  console.log("Complaints from Store:", complaints);
-
   return (
     <div className="p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-xl font-bold text-gray-900 mb-4">
+      <div className="mx-auto max-w-7xl">
+        <h1 className="mb-4 text-xl font-bold text-gray-900">
           User Complaints
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {complaints?.length > 0 ? (
             complaints.map((item) => (
-              <ComplaintCard key={item._id} data={item}  onDeleted={fetchComplaints} />
+              <ComplaintCard
+                key={item._id}
+                data={item}
+                userRole={user?.role}
+                onDeleted={fetchComplaints}
+                onStatusUpdated={fetchComplaints}
+              />
             ))
           ) : (
             <p className="text-sm text-gray-500">No complaints found.</p>

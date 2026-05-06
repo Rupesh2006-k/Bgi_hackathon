@@ -74,6 +74,26 @@ export const deleteComplaintService = async ({ formData }) => {
   }
 }
 
+export const statusUpdateComplaintService = async ({ formData }) => {
+  try {
+    const res = await axiosInstance.patch('/problem/status', formData)
+
+    showSuccess(res.data?.message || 'Complaint status updated successfully!')
+    console.log(res.data)
+
+    return res.data
+  } catch (error) {
+    console.log(error)
+
+    const message =
+      error.response?.data?.message ||
+      'Failed to update complaint status. Please try again.'
+
+    showError(message)
+    throw new Error(message, { cause: error })
+  }
+}
+
 export const getAllComplaintService = async () => {
   try {
     const res = await axiosInstance.get('/problem/all')

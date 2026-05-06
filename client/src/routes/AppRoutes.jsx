@@ -1,7 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import App from "../App";
-
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
@@ -13,21 +11,67 @@ import NotFound from "../components/NotFound";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import RoleRoute from "./RoleRoute";
+
 import ProfileUpdate from "../components/profile/ProfileUpdate";
+import AuthLayout from "../layouts/AuthLayout";
+import MainLayout from "../layouts/MainLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <MainLayout />,
     errorElement: <NotFound />,
     children: [
-      // Public route - sab dekh sakte hain
       {
         index: true,
         element: <Home />,
       },
 
-      // Only logout user
+      {
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "submit",
+            element: <SubmitComplaint />,
+          },
+          {
+            path: "view-complaints",
+            element: <ViewComplaints />,
+          },
+          {
+            path: "profile",
+            element: <ProfileUpdate />,
+          },
+
+          // only admin
+          {
+            element: <RoleRoute allowedRoles={["admin"]} />,
+            children: [
+              {
+                path: "dashboard",
+                element: <Dashboard />,
+              },
+              {
+                path: "management",
+                element: <Management />,
+              },
+            ],
+          },
+        ],
+      },
+
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
+  },
+
+  {
+    path: "/",
+    element: <AuthLayout />,
+    children: [
       {
         element: <PublicRoute />,
         children: [
@@ -41,39 +85,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-
-      // Login required routes
-      {
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: "dashboard",
-            element: <Dashboard />,
-          },
-          {
-            path: "submit",
-            element: <SubmitComplaint />,
-          },
-          {
-            path: "management",
-            element: <Management />,
-          },
-          {
-            path: "view-complaints",
-            element: <ViewComplaints />,
-          },
-          {
-            path: "profile",
-            element: <ProfileUpdate />,
-          },
-        ],
-      },
-
-      // 404
-      {
-        path: "*",
-        element: <NotFound />,
-      },
     ],
   },
 ]);
@@ -83,3 +94,91 @@ const AppRoutes = () => {
 };
 
 export default AppRoutes;
+// import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+// import Home from "../pages/Home";
+// import Login from "../pages/Login";
+// import Register from "../pages/Register";
+// import Dashboard from "../pages/Dashboard";
+// import SubmitComplaint from "../pages/SubmitComplaint";
+// import Management from "../pages/Management";
+// import ViewComplaints from "../pages/ViewComplaints";
+// import NotFound from "../components/NotFound";
+
+// import ProtectedRoute from "./ProtectedRoute";
+// import PublicRoute from "./PublicRoute";
+// import ProfileUpdate from "../components/profile/ProfileUpdate";
+
+// import AuthLayout from "../layouts/AuthLayout";
+// import MainLayout from "../layouts/MainLayout";
+
+// const router = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <MainLayout />,
+//     errorElement: <NotFound />,
+//     children: [
+//       {
+//         index: true,
+//         element: <Home />,
+//       },
+
+//       {
+//         element: <ProtectedRoute />,
+//         children: [
+//           {
+//             path: "dashboard",
+//             element: <Dashboard />,
+//           },
+//           {
+//             path: "submit",
+//             element: <SubmitComplaint />,
+//           },
+//           {
+//             path: "management",
+//             element: <Management />,
+//           },
+//           {
+//             path: "view-complaints",
+//             element: <ViewComplaints />,
+//           },
+//           {
+//             path: "profile",
+//             element: <ProfileUpdate />,
+//           },
+//         ],
+//       },
+
+//       {
+//         path: "*",
+//         element: <NotFound />,
+//       },
+//     ],
+//   },
+
+//   {
+//     path: "/",
+//     element: <AuthLayout />,
+//     children: [
+//       {
+//         element: <PublicRoute />,
+//         children: [
+//           {
+//             path: "login",
+//             element: <Login />,
+//           },
+//           {
+//             path: "register",
+//             element: <Register />,
+//           },
+//         ],
+//       },
+//     ],
+//   },
+// ]);
+
+// const AppRoutes = () => {
+//   return <RouterProvider router={router} />;
+// };
+
+// export default AppRoutes;
