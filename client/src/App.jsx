@@ -12,6 +12,7 @@ const App = () => {
     const fetchProfile = async () => {
       try {
         await profileService(dispatch);
+        
       } catch (error) {
         console.log(error.message);
       }
@@ -19,6 +20,7 @@ const App = () => {
 
     fetchProfile();
   }, [dispatch]);
+console.log("app");
 
   return (
     <div className="min-h-screen bg-white">

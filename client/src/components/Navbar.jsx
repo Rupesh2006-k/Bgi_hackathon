@@ -5,6 +5,7 @@ import { logoutService } from "../services/authService";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileDropdown from "./profile/ProfileDropdown";
 
+
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -66,7 +67,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="relative z-50 mx-auto w-full max-w-7xl">
+    <nav className="sticky z-50 mx-auto w-full max-w-7xl">
       <div className="relative flex items-center justify-between rounded-2xl border border-orange-100 bg-white/90 px-4 py-3 shadow-sm backdrop-blur md:rounded-full md:px-6">
         {/* Logo */}
         <Link to="/" className="flex shrink-0 items-center gap-2.5">

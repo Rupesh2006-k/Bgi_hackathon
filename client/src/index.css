@@ -13,3 +13,90 @@
 .animate-wave {
   animation: wave 1s infinite ease-in-out;
 }
+
+
+/* =========================
+   Google Translate Custom CSS
+   ========================= */
+
+/* Hide Google default UI */
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+body > .skiptranslate,
+.goog-logo-link,
+.goog-te-gadget,
+.goog-te-gadget span,
+.goog-te-combo,
+#google_translate_element,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe {
+  display: none !important;
+}
+
+/* Remove top gap added by Google */
+body {
+  top: 0 !important;
+}
+
+/* =========================
+   Hide Scrollbar
+   ========================= */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: none;
+}
+
+/* IE/Old Edge */
+* {
+  -ms-overflow-style: none;
+}
+
+/* =========================
+   Custom Select Styling
+   ========================= */
+
+.custom-language-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #fdba74; /* orange-300 */
+  border-radius: 9999px;
+  background-color: #fff7ed; /* orange-50 */
+  color: #ea580c; /* orange-600 */
+  font-size: 12px;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Focus state (blue ke jagah orange) */
+.custom-language-select:focus {
+  border-color: #f97316; /* orange-500 */
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
+  outline: none;
+}
+
+/* Option colors */
+.custom-language-select option {
+  background: #ffffff;
+  color: #374151; /* gray-700 */
+}

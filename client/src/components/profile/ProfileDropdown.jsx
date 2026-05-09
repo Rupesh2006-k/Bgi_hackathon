@@ -2,6 +2,7 @@ import { LogOut, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FaUserEdit } from "react-icons/fa";
 import { useEffect, useRef } from "react";
+import GoogleTranslate from "../GoogleTranslate";
 
 const ProfileDropdown = ({
   userdata,
@@ -54,7 +55,7 @@ const ProfileDropdown = ({
       {profileOpen && (
         <div
           onClick={(e) => e.stopPropagation()}
-          className="absolute right-0 top-12 z-[9999] w-[250px] rounded-xl border border-gray-200 bg-white p-4 shadow-xl"
+          className="absolute right-0 top-12 z-[9999] w-[270px] rounded-xl border border-gray-200 bg-white p-4 shadow-xl"
         >
           <h3 className="text-sm font-bold text-gray-800">
             {userdata?.name || userdata?.fullName || "User"}
@@ -75,6 +76,15 @@ const ProfileDropdown = ({
           <span className="mt-3 inline-block rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-600 capitalize">
             {userdata?.role || "citizen"}
           </span>
+
+          <hr className="my-3" />
+
+          <div>
+            <p className="mb-2 text-xs font-semibold text-gray-600">
+              Select Language
+            </p>
+            <GoogleTranslate />
+          </div>
 
           <hr className="my-3" />
 
@@ -104,78 +114,3 @@ const ProfileDropdown = ({
 };
 
 export default ProfileDropdown;
-
-// import { LogOut, User } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
-// import { FaUserEdit } from "react-icons/fa";
-
-// const ProfileDropdown = ({
-//   userdata,
-//   profileOpen,
-//   setProfileOpen,
-//   handleLogout,
-// }) => {
-//   const navigate = useNavigate();
-
-//   const handleProfileUpdate = () => {
-//     setProfileOpen(false);
-//     navigate("/profile");
-//   };
-
-//   return (
-//     <div className="relative">
-//       <button
-//         onClick={() => setProfileOpen(!profileOpen)}
-//         className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white transition hover:bg-orange-500"
-//       >
-//         <User size={18} />
-//       </button>
-
-//       {profileOpen && (
-//         <div className="absolute right-0 top-12 z-50 w-[250px] rounded-xl border border-gray-200 bg-white p-4 shadow-xl">
-//           <h3 className="text-sm font-bold text-gray-800">
-//             {userdata?.name || "User"}
-//           </h3>
-
-//           <p className="mt-1 break-all text-xs text-gray-500">
-//             {userdata?.email || "No email"}
-//           </p>
-
-//           <p className="mt-1 text-xs text-gray-500">
-//             {userdata?.mobile || "No mobile number provided"}
-//           </p>
-
-//           <p className="mt-1 text-xs text-gray-500">
-//             {userdata?.address || "No address provided"}
-//           </p>
-
-//           <span className="mt-3 inline-block rounded-full bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-600 capitalize">
-//             {userdata?.role || "User"}
-//           </span>
-
-//           <hr className="my-3" />
-
-//           <div className="flex items-center justify-between gap-3">
-//             <button
-//               onClick={handleProfileUpdate}
-//               className="flex items-center gap-2 text-xs bg-orange-100 px-3 py-1 rounded-full text-orange-500 hover:bg-orange-200 transition"
-//             >
-//               <FaUserEdit size={14} />
-//               Profile
-//             </button>
-
-//             <button
-//               onClick={handleLogout}
-//               className="flex items-center gap-2 text-sm text-red-500 hover:text-red-600 transition"
-//             >
-//               <LogOut size={16} />
-//               Logout
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ProfileDropdown;

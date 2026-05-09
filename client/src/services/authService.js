@@ -58,6 +58,7 @@ const logoutService = async dispatch => {
 const profileService = async dispatch => {
   try {
     const res = await axiosInstance.get('/auth/profile')
+console.log(res);
 
     const userData = res?.data?.data
 

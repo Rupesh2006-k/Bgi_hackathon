@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
+import FadeEffect from "./FadeEffect";
 const HeroSection = () => {
   return (
     <section className="relative overflow-hidden bg-orange-50/30 px-6 py-22.5">
@@ -50,15 +51,16 @@ const HeroSection = () => {
         </div>
 
         {/* Right Image */}
-        <div className="relative mx-auto w-full max-w-xl">
+        <div className="relative mx-auto  w-full max-w-xl">
           <div className="absolute -right-5 -top-5 z-0 h-28 w-28 rotate-12 rounded-3xl bg-orange-300/50" />
 
           <div className="relative z-10 rounded-3xl border border-orange-200 bg-white p-4 shadow-2xl">
-            <img
+            {/* <img
               src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80"
               alt="Modern city"
-              className="h-[260px] w-full rounded-2xl object-cover sm:h-[320px md:h-[360px]"
-            />
+              className="h-[270px] w-full rounded-2xl object-cover sm:h-[320px md:h-[360px]"
+            /> */}
+            <FadeEffect/>
           </div>
         </div>
       </div>
