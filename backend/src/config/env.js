@@ -17,7 +17,8 @@ const env = {
   PORT: requireEnv('PORT'),
   MONGO_URI: requireEnv('MONGO_URI'),
   JWT_SECRET: requireEnv('JWT_SECRET'),
-  FRONTEND_URL: requireEnv('FRONTEND_URL')
+  FRONTEND_URL: requireEnv('FRONTEND_URL'),
+  GEMINI_API_KEY: requireEnv('GEMINI_API_KEY')
 }
 console.log('✅ All environment variables loaded successfully')
 export default env
