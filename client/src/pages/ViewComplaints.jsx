@@ -10,10 +10,20 @@ const ViewComplaints = () => {
   const complaints = useSelector((state) => state.complaint.complaints);
   const user = useSelector((state) => state.user.user);
 
+  const isAdmin = user?.role === "admin";
+
   const fetchComplaints = async () => {
     try {
       const res = await getAllComplaintService();
-      dispatch(setComplaints(res?.data || []));
+      const allComplaints = res?.data || [];
+
+      const filteredComplaints = isAdmin
+        ? allComplaints
+        : allComplaints.filter(
+            (item) => item?.createdBy?._id === user?._id
+          );
+
+      dispatch(setComplaints(filteredComplaints));
     } catch (error) {
       console.log("Complaint fetch error:", error);
       dispatch(setComplaints([]));
@@ -21,14 +31,14 @@ const ViewComplaints = () => {
   };
 
   useEffect(() => {
-    fetchComplaints();
-  }, []);
+    if (user?._id) fetchComplaints();
+  }, [user?._id, user?.role]);
 
   return (
     <div className="p-4 md:p-6">
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-4 text-xl font-bold text-gray-900">
-          User Complaints
+          {isAdmin ? "All Complaints" : "My Complaints"}
         </h1>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -37,7 +47,7 @@ const ViewComplaints = () => {
               <ComplaintCard
                 key={item._id}
                 data={item}
-                userRole={user?.role}
+                user={user}
                 onDeleted={fetchComplaints}
                 onStatusUpdated={fetchComplaints}
               />

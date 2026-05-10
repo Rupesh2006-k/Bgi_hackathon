@@ -8,13 +8,24 @@ import {
   statusUpdateComplaintService,
 } from "../../services/complaintService";
 
-const ComplaintCard = ({ data, userRole, onDeleted, onStatusUpdated }) => {
+const ComplaintCard = ({ data, user, onDeleted, onStatusUpdated }) => {
   const navigate = useNavigate();
 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
 
+  const isOwner = data?.createdBy?._id === user?._id;
+  const isAdmin = user?.role === "admin";
+
+  // owner hi edit/delete karega
+  const canManageComplaint = isOwner;
+
+  // admin status update karega
+  const canUpdateStatus = isAdmin;
+
   const handleEdit = () => {
+    if (!canManageComplaint) return;
+
     navigate("/submit", {
       state: {
         editMode: true,
@@ -24,6 +35,8 @@ const ComplaintCard = ({ data, userRole, onDeleted, onStatusUpdated }) => {
   };
 
   const handleDelete = async () => {
+    if (!canManageComplaint) return;
+
     try {
       setDeleteLoading(true);
 
@@ -44,6 +57,8 @@ const ComplaintCard = ({ data, userRole, onDeleted, onStatusUpdated }) => {
   };
 
   const handleStatusChange = async (newStatus) => {
+    if (!canUpdateStatus) return;
+
     try {
       setStatusLoading(true);
 
@@ -73,16 +88,19 @@ const ComplaintCard = ({ data, userRole, onDeleted, onStatusUpdated }) => {
           </h3>
 
           <p className="mt-1 text-xs text-gray-400">
-            Complaint ID: {data?._id?.slice(-6)?.toUpperCase() || "N/A"}
+            Complaint ID:{" "}
+            {data?.trackingId || data?._id?.slice(-6)?.toUpperCase() || "N/A"}
           </p>
         </div>
 
-        <ComplaintActions
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          deleteLoading={deleteLoading}
-          statusLoading={statusLoading}
-        />
+        {canManageComplaint && (
+          <ComplaintActions
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            deleteLoading={deleteLoading}
+            statusLoading={statusLoading}
+          />
+        )}
       </div>
 
       <ComplaintInfo data={data} />
@@ -90,7 +108,7 @@ const ComplaintCard = ({ data, userRole, onDeleted, onStatusUpdated }) => {
       <ComplaintBadges
         priority={data?.priority}
         status={data?.status}
-        userRole={userRole}
+        canUpdateStatus={canUpdateStatus}
         statusLoading={statusLoading}
         deleteLoading={deleteLoading}
         onStatusChange={handleStatusChange}

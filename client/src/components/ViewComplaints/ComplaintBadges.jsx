@@ -3,16 +3,13 @@ import StatusDropdown from "./StatusDropdown";
 const ComplaintBadges = ({
   priority,
   status,
-  userRole,
+  canUpdateStatus = false,
   statusLoading,
   deleteLoading,
   onStatusChange,
 }) => {
   const currentPriority = priority?.toLowerCase() || "medium";
   const currentStatus = status?.toLowerCase() || "pending";
-
-  const canUpdateStatus =
-    userRole?.toLowerCase() === "admin" || userRole?.toLowerCase() === "worker";
 
   const priorityStyle = {
     urgent: "bg-red-100 text-red-700 border-red-200",

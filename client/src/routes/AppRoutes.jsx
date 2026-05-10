@@ -16,6 +16,7 @@ import RoleRoute from "./RoleRoute";
 import ProfileUpdate from "../components/profile/ProfileUpdate";
 import AuthLayout from "../layouts/AuthLayout";
 import MainLayout from "../layouts/MainLayout";
+import AiChatBot from "../pages/AiChatBot";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
           {
             path: "profile",
             element: <ProfileUpdate />,
+          },
+          {
+            path: "ai",
+            element: <AiChatBot/>,
           },
 
           // only admin
